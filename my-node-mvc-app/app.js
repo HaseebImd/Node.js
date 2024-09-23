@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
+const companyRoutes = require('./routes/companyRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.use(express.static('public')); // Serve static files
 
 // Routes
 app.use('/users', userRoutes);
+app.use('/company', companyRoutes);
 
 // Start server
 app.listen(PORT, () => {
