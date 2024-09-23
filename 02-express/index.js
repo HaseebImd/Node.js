@@ -1,12 +1,51 @@
-const http = require('http');
-const express = require('express');
-const app = express();
+// Import mongoose
+const mongoose = require('mongoose');
 
-app.get('/', (req, res) => {
-    console.log(req.headers);
-    res.send('Hello from Express Server');
+// MongoDB connection URL
+const mongoURL = 'mongodb://localhost:27017/myDatabase'; // Change to your MongoDB URL
+
+// Connect to MongoDB
+mongoose.connect(mongoURL)
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
+
+
+// Define a schema
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    age: Number,
+    address: {
+        city: String,
+        zip: String
+    }
 });
 
-app.listen(3001, () => {
-    console.log('Server started on port 3001');
-});
+// Define a model
+const User = mongoose.model('User', userSchema);
+
+
+// Create a new user
+const createUser = async () => {
+    const newUser = new User({
+        name: 'John Doe',
+        email: 'john@example.com',
+        age: 29,
+        address: {
+            city: 'New York',
+            zip: '10001'
+        }
+    });
+
+    await newUser.save();
+    console.log('User created:', newUser);
+};
+
+createUser();
